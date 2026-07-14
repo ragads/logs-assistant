@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__whimsical-remote__fetch"
+    ]
+  }
+}
