@@ -125,7 +125,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
             <form onSubmit={handleSubmit} className="grid gap-4" noValidate>
               {isSignup && (
-                <Field label="Name" name="name" placeholder="Harikishore" error={errors.name} />
+                <Field label="Name" name="name" placeholder="Enter a name" error={errors.name} />
               )}
               <Field label="Email" name="email" type="email" placeholder="you@company.com" error={errors.email} />
               <Field
