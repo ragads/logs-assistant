@@ -86,11 +86,17 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#DCEEFC] px-4 py-10">
-      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-[28px] bg-[#050d16] shadow-[0_30px_80px_rgba(8,30,45,0.35)] lg:grid-cols-2">
-        <section className="flex flex-col justify-center px-8 py-12 sm:px-12">
+      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-[28px] border border-white/70 bg-[#050d16] shadow-[0_30px_80px_rgba(8,30,45,0.35)] lg:grid-cols-2">
+        <section
+          className="flex flex-col justify-center px-8 py-12 sm:px-12"
+          style={{
+            background:
+              "radial-gradient(140% 110% at 8% 0%, #0f3b44 0%, #0a2730 24%, #06181f 52%, #030a10 100%)"
+          }}
+        >
           <div className="w-full max-w-sm">
             <h1 className="text-4xl font-bold tracking-tight text-white">{title}</h1>
-            <p className="mt-3 text-sm text-white/60">
+            <p className="mt-2 text-sm text-white/60">
               {switchPrompt}{" "}
               <Link className="font-medium text-cyan-300 underline underline-offset-2 hover:text-cyan-200" href={switchHref}>
                 {switchLabel}
@@ -191,7 +197,7 @@ function PasswordField({
       {label}
       <div className="relative">
         <input
-          className="h-12 w-full rounded-xl border-none bg-white pl-4 pr-11 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+          className="h-12 w-full rounded-xl border-none bg-white py-0 pl-4 pr-12 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-300"
           name={name}
           type={visible ? "text" : "password"}
           placeholder={placeholder}
@@ -200,9 +206,9 @@ function PasswordField({
           type="button"
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? "Hide password" : "Show password"}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+          className="absolute right-0 top-0 flex h-full w-11 items-center justify-center border-l border-slate-200 text-slate-400 hover:text-slate-600 focus:outline-none"
         >
-          {visible ? <EyeOff size={18} /> : <Eye size={18} />}
+          {visible ? <EyeOff size={17} /> : <Eye size={17} />}
         </button>
       </div>
       {error && <span className="text-xs font-medium text-rose-300">{error}</span>}
