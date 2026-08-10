@@ -42,3 +42,28 @@ button {
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-pine focus:ring-offset-2 focus:ring-offset-white;
 }
+
+/* Scrollable dialog body: thin scrollbar that doesn't chain to the page behind. */
+.modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  overscroll-behavior: contain;
+}
+
+.modal-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border: 3px solid #fff;
+  border-radius: 9999px;
+}
+
+.modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
