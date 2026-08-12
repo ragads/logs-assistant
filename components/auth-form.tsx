@@ -20,7 +20,9 @@ export function AuthForm({ mode }: { mode: Mode }) {
   const isSignup = mode === "signup";
 
   const title = isSignup ? "Create account" : "Sign in";
-  const switchPrompt = isSignup ? "Already have an account?" : "Don't have an account?";
+  const switchPrompt = isSignup
+    ? "Already have an account?"
+    : "Don't have an account?";
   const switchLabel = isSignup ? "Sign in" : "Create now";
   const switchHref = isSignup ? "/login" : "/signup";
 
@@ -31,14 +33,18 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
     const form = new FormData(event.currentTarget);
     const payload = Object.fromEntries(form.entries());
-    const result = isSignup ? signupSchema.safeParse(payload) : loginSchema.safeParse(payload);
+    const result = isSignup
+      ? signupSchema.safeParse(payload)
+      : loginSchema.safeParse(payload);
 
     if (!result.success) {
       const nextErrors: Errors = {};
+
       result.error.issues.forEach((issue) => {
         const key = issue.path[0]?.toString() ?? "form";
         nextErrors[key] = issue.message;
       });
+
       setErrors(nextErrors);
       return;
     }
@@ -53,67 +59,106 @@ export function AuthForm({ mode }: { mode: Mode }) {
         email: string;
         password: string;
       };
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { name } }
+        options: { data: { name } },
       });
+
       setLoading(false);
+
       if (error) {
         setFormError(error.message);
         return;
       }
+
       // If email confirmation is required, there is no session yet.
       if (!data.session) {
         setNotice("Check your email to confirm your account, then sign in.");
         return;
       }
+
       router.push("/dashboard");
       router.refresh();
       return;
     }
 
-    const { email, password } = result.data as { email: string; password: string };
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { email, password } = result.data as {
+      email: string;
+      password: string;
+    };
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
     setLoading(false);
+
     if (error) {
       setFormError("Invalid email or password.");
       return;
     }
+
     router.push("/dashboard");
     router.refresh();
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#DCEEFC] px-4 py-10">
-      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-[28px] border border-white/70 bg-[#050d16] shadow-[0_30px_80px_rgba(8,30,45,0.35)] lg:grid-cols-2">
+    <main className="flex min-h-screen items-center justify-center bg-cloud px-4 py-10">
+      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-[28px] border border-emerald-900/40 bg-[#041a18] shadow-[0_30px_80px_rgba(23,33,31,0.18)] lg:grid-cols-2">
         <section
           className="flex flex-col justify-center px-8 py-12 sm:px-12"
           style={{
             background:
-              "radial-gradient(140% 110% at 8% 0%, #0f3b44 0%, #0a2730 24%, #06181f 52%, #030a10 100%)"
+              "radial-gradient(140% 110% at 8% 0%, #0f766e 0%, #0a403b 24%, #062c28 52%, #041a18 100%)",
           }}
         >
           <div className="w-full max-w-sm">
-            <h1 className="text-4xl font-bold tracking-tight text-white">{title}</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-white">
+              {title}
+            </h1>
+
             <p className="mt-2 text-sm text-white/60">
               {switchPrompt}{" "}
-              <Link className="font-medium text-cyan-300 underline underline-offset-2 hover:text-cyan-200" href={switchHref}>
+              <Link
+                className="font-medium text-emerald-300 underline underline-offset-2 hover:text-emerald-200"
+                href={switchHref}
+              >
                 {switchLabel}
               </Link>
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-8 grid gap-5" noValidate>
+            <form
+              onSubmit={handleSubmit}
+              className="mt-8 grid gap-5"
+              noValidate
+            >
               {isSignup && (
-                <Field label="Name" name="name" placeholder="Enter your name" error={errors.name} />
+                <Field
+                  label="Name"
+                  name="name"
+                  placeholder="Enter your name"
+                  error={errors.name}
+                />
               )}
-              <Field label="Email" name="email" type="email" placeholder="example@gmail.com" error={errors.email} />
+
+              <Field
+                label="Email"
+                name="email"
+                type="email"
+                placeholder="example@gmail.com"
+                error={errors.email}
+              />
+
               <PasswordField
                 label="Password"
                 name="password"
                 placeholder="Enter your password"
                 error={errors.password}
               />
+
               {isSignup && (
                 <PasswordField
                   label="Confirm password"
@@ -128,6 +173,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
                   {formError}
                 </div>
               )}
+
               {notice && (
                 <div className="rounded-xl border border-emerald-300/30 bg-emerald-400/10 px-3 py-2 text-sm font-medium text-emerald-200">
                   {notice}
@@ -136,7 +182,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
 
               <button
                 disabled={loading}
-                className="mt-2 h-12 rounded-xl bg-gradient-to-r from-[#2F5BFF] to-[#3E6BFF] text-sm font-semibold text-white shadow-[0_10px_24px_rgba(47,91,255,0.35)] transition hover:from-[#2547d6] hover:to-[#3357e0] focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-[#050d16] disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-2 h-12 rounded-xl bg-pine text-sm font-semibold text-white shadow-[0_10px_24px_rgba(15,118,110,0.35)] transition hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-pine focus:ring-offset-2 focus:ring-offset-[#041a18] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? "Please wait..." : title}
               </button>
@@ -157,7 +203,7 @@ function Field({
   name,
   type = "text",
   placeholder,
-  error
+  error,
 }: {
   label: string;
   name: string;
@@ -168,13 +214,17 @@ function Field({
   return (
     <label className="grid gap-2 text-sm font-medium text-white/80">
       {label}
+
       <input
-        className="h-12 rounded-xl border-none bg-white px-4 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+        className="h-12 rounded-xl border-none bg-white px-4 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pine"
         name={name}
         type={type}
         placeholder={placeholder}
       />
-      {error && <span className="text-xs font-medium text-rose-300">{error}</span>}
+
+      {error && (
+        <span className="text-xs font-medium text-rose-300">{error}</span>
+      )}
     </label>
   );
 }
@@ -183,7 +233,7 @@ function PasswordField({
   label,
   name,
   placeholder,
-  error
+  error,
 }: {
   label: string;
   name: string;
@@ -195,13 +245,15 @@ function PasswordField({
   return (
     <label className="grid gap-2 text-sm font-medium text-white/80">
       {label}
+
       <div className="relative">
         <input
-          className="h-12 w-full rounded-xl border-none bg-white py-0 pl-4 pr-12 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+          className="h-12 w-full rounded-xl border-none bg-white py-0 pl-4 pr-12 text-sm text-ink placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-pine"
           name={name}
           type={visible ? "text" : "password"}
           placeholder={placeholder}
         />
+
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
@@ -211,7 +263,10 @@ function PasswordField({
           {visible ? <EyeOff size={17} /> : <Eye size={17} />}
         </button>
       </div>
-      {error && <span className="text-xs font-medium text-rose-300">{error}</span>}
+
+      {error && (
+        <span className="text-xs font-medium text-rose-300">{error}</span>
+      )}
     </label>
   );
 }
